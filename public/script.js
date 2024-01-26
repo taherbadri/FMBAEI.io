@@ -45,7 +45,7 @@ const feedback = async (e) => {
 	});
 
 	const data = await res.json();
-	console.log(data);
+	// console.log(data);
 	const div = document.createElement("div");
 	const text = document.createTextNode(data.msg);
 	div.className = data.err
@@ -69,15 +69,60 @@ const fetchThali = async () => {
 	document.querySelector(".thali-data").innerHTML = "";
 	const res = await fetch(routes.admin.totalThali);
 	const data = await res.json();
-	console.log(data);
-	document.querySelector(".thali-data").innerHTML = `<th>Sabeel</th>
+	// console.log(data);
+	document.querySelector(".thali-data").innerHTML = `
+	<th>Date</th>
+	<th>Sabeel</th>
 	<th>Name</th>
 	<th>Thali Number</th>
 	<th>Thali Quantity</th>
 	<th>Comments</th>`;
 	data.thali.forEach((currentItem) => {
 		const tr = document.createElement("tr");
-		tr.innerHTML = `<td>${currentItem.sabeel}</td>
+		tr.innerHTML = `
+		<td>${new Date(currentItem.createdAt)
+			.toString()
+			.split(" ")
+			.splice(0, 4)
+			.join(" ")}</td>
+		<td>${currentItem.sabeel}</td>
+		<td>${currentItem.name}</td>
+		<td>${currentItem.thaliNumber}</td>
+		<td>${currentItem.qty}</td>
+		<td>${currentItem.comment}</td>`;
+		document.querySelector(".thali-data").firstElementChild.appendChild(tr);
+	});
+};
+
+const dateFilter = async () => {
+	document.querySelector(".thali-data").innerHTML = "";
+	const date = document.querySelector("#date").value;
+	const res = await fetch(routes.admin.totalThali, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json",
+		},
+		body: JSON.stringify({
+			date,
+		}),
+	});
+	const data = await res.json();
+	document.querySelector(".thali-data").innerHTML = `
+	<th>Date</th>
+	<th>Sabeel</th>
+	<th>Name</th>
+	<th>Thali Number</th>
+	<th>Thali Quantity</th>
+	<th>Comments</th>`;
+	data.thali.forEach((currentItem) => {
+		const tr = document.createElement("tr");
+		tr.innerHTML = `
+		<td>${new Date(currentItem.createdAt)
+			.toString()
+			.split(" ")
+			.splice(0, 4)
+			.join(" ")}</td>
+		<td>${currentItem.sabeel}</td>
 		<td>${currentItem.name}</td>
 		<td>${currentItem.thaliNumber}</td>
 		<td>${currentItem.qty}</td>
@@ -92,14 +137,15 @@ const page = () => {
 			document.querySelector(".logout").addEventListener("click", async (e) => {
 				const res = await fetch("/user/logout", { method: "POST" });
 				const data = await res.json();
-				console.log(object);
 			});
 			feedbackForm.addEventListener("submit", feedback);
 			break;
 		case routes.admin.adminDashboard:
-			console.log("working");
 			fetchThali();
 			totalThali.addEventListener("click", fetchThali);
+			document
+				.querySelector(".submit-date")
+				.addEventListener("click", dateFilter);
 			break;
 
 		default:
