@@ -12,7 +12,7 @@ const register = async (req, res, next) => {
 	console.log(req.body);
 	const user = await User.create({ ...req.body });
 	// return res.status(StatusCodes.CREATED).json({ user });
-	return res.redirect("/login");
+	return res.redirect("/");
 };
 
 const login = async (req, res, next) => {
