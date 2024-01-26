@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./bootstrap.min.css">
+</head>
+
+<body class="dashboard-body">
+    <nav class="navbar navbar-expand-md" style="background-color: #ae8b0d;">
+        <div class="container"><a href class="text-white navbar-brand">FMB
+                Haidery
+                Colony</a><button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span
+                    class="navbar-toggler-icon text-white"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item text-white">Afdalus Salaam User</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container d-flex align-items-center justify-content-center mt-3"><img src="./img/fmb-website-logo.png"
+        alt="logo" class="img-fluid"></div>
+    <section class="row d-flex justify-content-center mt-3">
+        <form action="" class="col-sm-12 col-md-6 p-3">
+        <div class="container form">
+            <div class="mb-3 row">
+                <label for="sabeel" class="col-sm-2 col-form-label">Sabeel Number :</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="sabeel" name="sabeel"
+                        value="User Sabeel">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="thali" class="col-sm-2 col-form-label">Thali number :</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="thali" name="thali"
+                        value="Thali Number">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="type" class="col-sm-2 col-form-label">Thali Type :</label>
+                <div class="col-sm-10">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="qty" id="full" name="full" value="option1"
+                            checked>
+                        <label class="form-check-label" for="full">Full</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="qty" id="half" name="half" value="option2">
+                        <label class="form-check-label" for="half">Half</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-floating mb-3 row">
+                <textarea class="form-control" placeholder="Leave a comment here" id="comments"
+                    name="comments"></textarea>
+                <label for="comments">Comments</label>
+            </div>
+        </div>
+        </div>
+        <div class="col-12">
+            <button class="btn text-white" style="background-color: #ae8b0d;" type="submit">Submit form</button>
+        </div>
+        </form>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

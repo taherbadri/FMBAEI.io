@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/bootstrap.min.css">
+</head>
+
+<body class="dashboard-body">
+    <nav class="navbar navbar-expand-md" style="background-color: #ae8b0d;">
+        <div class="container"><a href class="text-white navbar-brand">Afdalus Salaam <%= user.username; %></a><button
+                class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span
+                    class="navbar-toggler-icon text-white"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form action="/user/logout" class="ms-auto" method="post">
+                <ul class="navbar-nav ">
+                    <li class="nav-item text-white"><a href="/" class="text-white btn btn-link logout">Logout</a></li>
+                </ul>
+            </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container d-flex align-items-center justify-content-center mt-3"><a
+            href="https://www.faizulmawaidilburhaniyah.com/" target="_blank"><img src="/img/fmb-website-logo.png"
+                alt="logo" class="img-fluid"></a></div>
+    <section class="container d-flex justify-content-center align-items-center p-3 flex-column mt-3 form-container">
+        <form class="col-sm-12 col-md-6 p-3 feedback shadow rounded-3" style="background-color: #fcfbf9;">
+        <!-- <form action="/homepage/dashboard" class="col-sm-12 col-md-6 p-3 bg-light shadow rounded-3" method="POST"> -->
+            <div class="container form">
+                <div class="mb-3 row">
+                    <label for="sabeel" class="col-sm-3 col-form-label">Sabeel Number:</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="sabeel" name="sabeel"
+                            value="<%= user.sabeel; %> ">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="thaliNumber" class="col-sm-3 col-form-label">Thali Number:</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="thaliNumber" name="thaliNumber"
+                            value="<%= user.thaliNumber; %>">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="type" class="col-sm-3 col-form-label">Thali Quantity:</label>
+                    <div class="col-sm-9 d-flex align-items-center">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input qty" type="radio" name="qty" id="full" name="full" value="full"
+                                checked>
+                            <label class="form-check-label" for="full">Full</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input qty" type="radio" name="qty" id="half" name="half" value="half">
+                            <label class="form-check-label" for="half">Half</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input qty" type="radio" name="qty" id="no-thali" name="no-thali"
+                                value="no-thali">
+                            <label class="form-check-label" for="no-thali">No Thali</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="form-floating mb-3 row">
+                    <textarea class="form-control" rows="10" placeholder="Leave a comment here" id="comments"
+                        name="comments"></textarea>
+                    <label for="comments">Comments</label>
+                </div> -->
+                <div class="mb-3 row">
+                    <textarea class="form-control" rows="5" placeholder="Leave a comment here" id="comment"
+                        name="comment"></textarea>
+                </div>
+            </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center align-items-center">
+                <button class="btn text-white rounded-5" style="background-color: #ae8b0d;" type="submit">Submit form</button>
+            </div>
+        </form>
+    </section>
+
+    <script src="/script.js"></script>
+    <script src="/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
