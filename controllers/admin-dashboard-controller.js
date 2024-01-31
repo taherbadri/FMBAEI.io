@@ -30,7 +30,7 @@ const getHalfThali = async (req, res) => {
 
 const DateFilter = async (req, res) => {
 	const { date } = req.body;
-	console.log(date);
+	// console.log(date);
 	if (!date) {
 		throw new BadRequestError("Please Enter Date");
 	}
@@ -44,8 +44,8 @@ const DateFilter = async (req, res) => {
 	// 		Number(dateSplit[2]) + 1
 	// 	)
 	// );
-	const data = await ThaliFeedback.find({
-		createdAt: {
+	const data = await Attendence.find({
+		markedAt: {
 			$gte: new Date(
 				Number(dateSplit[0]),
 				Number(dateSplit[1].split("")[1] - 1),
