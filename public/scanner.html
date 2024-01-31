@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Qr scanner</title>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"
+            integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    </head>
+    <body>
+        <!-- style="height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0;margin: 0;" -->
+        <div class="container" id="main">
+            <div id="reader"></div>
+            <div id="result"></div>
+        </div></body>
+    <script>
+        console.log(document.getElementById('main').style.width);
+        console.log(window.screen.height + ' x '+ window.screen.width*0.5);
+        const scanner = new Html5QrcodeScanner('reader', {
+            qrbox : {
+                width : window.screen.width*0.5,
+                height : window.screen.width*0.5
+            },
+            fps : 20,
+        })
+
+        const success =  async (result) => {
+            console.log(result + ' : this is result');
+            const id = result.split('?id=')[1]
+            if(id){
+                const res = await fetch('/scanner', {
+                    method : 'POST',
+                    headers : {
+                        'content-type' : 'application/json'
+                    },
+                    body : JSON.stringify({
+                       id
+                    })
+                })
+                const data = await res.json()
+                console.log(data.msg + ' : this is data');
+                document.querySelector('.result').innerHTML = data.msg
+            }
+            console.log('id not valid');
+        }
+
+        const error = (err) => {
+            console.log(err);
+            
+        }
+
+        scanner.render(success , error)
+    </script>
+</html>

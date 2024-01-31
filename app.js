@@ -18,6 +18,7 @@ const auth = require("./router/auth");
 const adminAuth = require("./router/admin");
 const dashboard = require("./router/dashboard");
 const adminDashboard = require("./router/admin-dashboard");
+const scannerRouter = require("./router/scanner-router");
 
 const notFound = require("./middlewares/not-found");
 const errorHandlerMiddleware = require("./middlewares/error-handler");
@@ -30,7 +31,7 @@ const errorHandlerMiddleware = require("./middlewares/error-handler");
 // 		max: 100,
 // 	})
 // );
-// app.use(express.json());
+app.use(express.json());
 // app.use(helmet());
 // app.use(cors());
 // app.use(xss());
@@ -50,6 +51,9 @@ app.use("/", auth);
 app.use("/admin", adminAuth);
 app.use("/user", authenticateuser, dashboard);
 app.use("/admin/access", authenticateAdmin, adminDashboard);
+
+// app.use(express.static("./public/scanner.html"));
+app.use("/scanner", express.static("./public/scanner.html"), scannerRouter);
 
 app.use(notFound);
 app.use(errorHandlerMiddleware);
