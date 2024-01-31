@@ -14,13 +14,11 @@ const markAttendence = async (req, res) => {
 		throw new errors.BadRequestError(
 			`${name} Attendence already marked for today`
 		);
+	} else {
+		await Attendence.create({ sabeel, markedAt: new Date() });
 	}
-	await Attendence.create({ sabeel, markedAt: new Date() });
+
 	res.status(StatusCodes.OK).json({ msg: "Attendence marked successfully" });
 };
 
-const scannerPage = (req, res) => {
-	res.render("scanner");
-};
-
-module.exports = { markAttendence, scannerPage };
+module.exports = { markAttendence };
