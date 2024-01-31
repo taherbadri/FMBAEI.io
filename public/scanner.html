@@ -29,7 +29,8 @@
 
         const success =  async (result) => {
             console.log(result + ' : this is result');
-            const id = result.split('?id=')[1]
+            const id = result
+            // const id = result.split('?id=')[1]
             if(id){
                 const res = await fetch('/scanner', {
                     method : 'POST',
