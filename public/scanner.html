@@ -43,7 +43,7 @@
                 })
                 const data = await res.json()
                 console.log(data.msg + ' : this is data');
-                document.querySelector('.result').innerHTML = data.msg
+                document.querySelector('#result').innerHTML = data.msg
             }
             console.log('id not valid');
         }
