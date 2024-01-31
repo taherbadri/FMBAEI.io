@@ -152,15 +152,14 @@ const page = () => {
 
 		case "/scanner":
 			// scanner ---
-
-			// console.log(document.getElementById("main").style.width);
 			console.log(window.screen.height + " x " + window.screen.width * 0.5);
 			const scanner = new Html5QrcodeScanner("reader", {
 				qrbox: {
 					width: window.screen.width * 0.5,
 					height: window.screen.width * 0.5,
 				},
-				fps: 20,
+				fps: 10,
+				rememberLastUsedCamera: true,
 			});
 
 			const success = async (result) => {
@@ -179,9 +178,20 @@ const page = () => {
 					});
 					const data = await res.json();
 					console.log(data.msg + " : this is data");
-					document.querySelector("#result").innerHTML = data.msg;
+					const div = document.createElement("div");
+					const text = document.createTextNode(data.msg);
+					div.className = data.err
+						? "text-center mb-3 p-3 rounded-3 shadow text-bg-danger"
+						: "text-center mb-3 p-3 rounded-3 shadow text-bg-success";
+
+					div.appendChild(text);
+					document
+						.querySelector("#main")
+						.insertBefore(div, document.querySelector("#reader"));
+					setTimeout(() => {
+						div.remove();
+					}, 100);
 				}
-				console.log("id not valid");
 			};
 
 			const error = (err) => {
