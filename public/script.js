@@ -152,7 +152,7 @@ const page = () => {
 
 		case "/scanner":
 			// scanner ---
-			console.log(window.screen.height + " x " + window.screen.width * 0.5);
+			// console.log(window.screen.height + " x " + window.screen.width * 0.5);
 			const scanner = new Html5QrcodeScanner("reader", {
 				qrbox: {
 					width: window.screen.width * 0.5,
@@ -163,9 +163,9 @@ const page = () => {
 			});
 
 			const success = async (result) => {
-				console.log(result + " : this is result");
 				const id = result;
 				// const id = result.split('?id=')[1]
+				scanner.pause({ shouldPauseVideo: true });
 				if (id) {
 					const res = await fetch("/scanner", {
 						method: "POST",
@@ -190,7 +190,10 @@ const page = () => {
 						.insertBefore(div, document.querySelector("#reader"));
 					setTimeout(() => {
 						div.remove();
-					}, 100);
+					}, 500);
+					setTimeout(() => {
+						scanner.resume();
+					}, 2000);
 				}
 			};
 
