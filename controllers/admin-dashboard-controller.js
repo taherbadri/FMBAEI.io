@@ -14,17 +14,22 @@ const getAdminDashboard = (req, res, next) => {
 };
 
 const getAllThali = async (req, res, next) => {
-	const thali = await Attendence.find({});
+	const date = new Date().toString().split(" ").splice(0, 4).join(" ");
+	const thali = await Attendence.find({ markedAt: date });
+	// console.log(thali[0].markedAt === date);
+	// console.log(thali);
 	return res.status(200).json({ thali, nbThali: thali.length });
 };
 
 const getFullThali = async (req, res) => {
-	const thali = await Attendence.find({ thali: "full" });
+	const date = new Date().toString().split(" ").splice(0, 4).join(" ");
+	const thali = await Attendence.find({ thali: "full", markedAt: date });
 	return res.status(200).json({ thali, nbThali: thali.length });
 };
 
 const getHalfThali = async (req, res) => {
-	const thali = await Attendence.find({ thali: "half" });
+	const date = new Date().toString().split(" ").splice(0, 4).join(" ");
+	const thali = await Attendence.find({ thali: "half", markedAt: date });
 	return res.status(200).json({ thali, nbThali: thali.length });
 };
 

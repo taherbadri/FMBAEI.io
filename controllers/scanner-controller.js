@@ -14,6 +14,7 @@ const markAttendence = async (req, res) => {
 	const date = new Date().toString().split(" ").splice(0, 4).join(" ");
 
 	const attendence = await Attendence.find({ markedAt: date });
+	console.log(attendence);
 	if (attendence.length !== 0) {
 		attendence.forEach((user) => {
 			if (user.sabeel === sabeel) {
@@ -32,7 +33,9 @@ const markAttendence = async (req, res) => {
 		markedAt: date,
 	});
 
-	res.status(StatusCodes.OK).json({ msg: "Attendence marked successfully" });
+	res
+		.status(StatusCodes.OK)
+		.json({ msg: `${name} Attendence marked successfully` });
 };
 
 module.exports = { markAttendence };
