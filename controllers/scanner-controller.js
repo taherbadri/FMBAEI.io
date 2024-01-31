@@ -9,14 +9,19 @@ const markAttendence = async (req, res) => {
 	if (!name) {
 		throw new errors.BadRequestError("User does not exist");
 	}
-	const attendence = await Attendence.find({ sabeel });
+	const date = new Date().toString().split(" ").splice(0, 4).join(" ");
+
+	const attendence = await Attendence.find({ markedAt: date });
 	if (attendence.length !== 0) {
-		throw new errors.BadRequestError(
-			`${name} Attendence already marked for today`
-		);
-	} else {
-		await Attendence.create({ sabeel, markedAt: new Date() });
+		attendence.forEach((user) => {
+			if (user.sabeel === sabeel) {
+				throw new errors.BadRequestError(
+					`${name} Attendence already marked for today`
+				);
+			}
+		});
 	}
+	await Attendence.create({ sabeel, markedAt: date });
 
 	res.status(StatusCodes.OK).json({ msg: "Attendence marked successfully" });
 };
