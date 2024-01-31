@@ -11,7 +11,9 @@ const markAttendence = async (req, res) => {
 	}
 	const attendence = await Attendence.find({ sabeel });
 	if (attendence.length !== 0) {
-		throw new errors.BadRequestError(`${name} Attendence marked for today`);
+		throw new errors.BadRequestError(
+			`${name} Attendence already marked for today`
+		);
 	}
 	await Attendence.create({ sabeel, markedAt: new Date() });
 	res.status(StatusCodes.OK).json({ msg: "Attendence marked successfully" });
