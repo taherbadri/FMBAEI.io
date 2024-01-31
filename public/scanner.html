@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +10,37 @@
             integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+        <link rel="stylesheet" href="./styles.css">
+        <link rel="stylesheet" href="./bootstrap.min.css">
+        <style>
+        button {
+            background-color: #b9822b;
+            color: white;
+            border-radius: 1em;
+            padding: 0.5em 1em;
+            border: none;
+            box-shadow: 0px 4px 8px #dfdfe2;
+        }
+        span{
+            color:#b9822b;
+        }
+        img[alt = 'Info icon']{
+            display: none;
+        }
+    </style>
+
     </head>
-    <body>
-        <!-- style="height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0;margin: 0;" -->
+    <body class="dashboard-body">
+        <div
+            class="container d-flex align-items-center justify-content-center mt-3"><a
+                href="https://www.faizulmawaidilburhaniyah.com/"
+                target="_blank"><img src="./img/fmb-website-logo.png"
+                    alt="logo" class="img-fluid"></a></div>
         <div class="container" id="main">
             <div id="reader"></div>
             <div id="result"></div>
         </div>
         <script src="./script.js"></script>
-
     </body>
 
 </html>

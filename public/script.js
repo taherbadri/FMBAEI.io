@@ -135,7 +135,9 @@ const page = () => {
 	switch (window.location.pathname) {
 		case routes.userDashboard:
 			document.querySelector(".logout").addEventListener("click", async (e) => {
-				const res = await fetch("/user/logout", { method: "POST" });
+				const res = await fetch("/user/logout", {
+					method: "POST",
+				});
 				const data = await res.json();
 			});
 			feedbackForm.addEventListener("submit", feedback);
@@ -148,48 +150,52 @@ const page = () => {
 				.addEventListener("click", dateFilter);
 			break;
 
+		case "/scanner":
+			// scanner ---
+
+			// console.log(document.getElementById("main").style.width);
+			console.log(window.screen.height + " x " + window.screen.width * 0.5);
+			const scanner = new Html5QrcodeScanner("reader", {
+				qrbox: {
+					width: window.screen.width * 0.5,
+					height: window.screen.width * 0.5,
+				},
+				fps: 20,
+			});
+
+			const success = async (result) => {
+				console.log(result + " : this is result");
+				const id = result;
+				// const id = result.split('?id=')[1]
+				if (id) {
+					const res = await fetch("/scanner", {
+						method: "POST",
+						headers: {
+							"content-type": "application/json",
+						},
+						body: JSON.stringify({
+							id,
+						}),
+					});
+					const data = await res.json();
+					console.log(data.msg + " : this is data");
+					document.querySelector("#result").innerHTML = data.msg;
+				}
+				console.log("id not valid");
+			};
+
+			const error = (err) => {
+				console.log(err);
+			};
+
+			scanner.render(success, error);
+			// --- scanner
+
+			break;
+
 		default:
 			break;
 	}
 };
-
-// scanner ---
-console.log(document.getElementById("main").style.width);
-console.log(window.screen.height + " x " + window.screen.width * 0.5);
-const scanner = new Html5QrcodeScanner("reader", {
-	qrbox: {
-		width: window.screen.width * 0.5,
-		height: window.screen.width * 0.5,
-	},
-	fps: 20,
-});
-
-const success = async (result) => {
-	console.log(result + " : this is result");
-	const id = result;
-	// const id = result.split('?id=')[1]
-	if (id) {
-		const res = await fetch("/scanner", {
-			method: "POST",
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify({
-				id,
-			}),
-		});
-		const data = await res.json();
-		console.log(data.msg + " : this is data");
-		document.querySelector("#result").innerHTML = data.msg;
-	}
-	console.log("id not valid");
-};
-
-const error = (err) => {
-	console.log(err);
-};
-
-scanner.render(success, error);
-// --- scanner
 
 document.addEventListener("DOMContentLoaded", page);
