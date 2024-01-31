@@ -6,6 +6,7 @@ const {
 	UnauthenticatedError,
 } = require("../errors");
 const User = require("../models/user");
+const Attendence = require("../models/attendence");
 
 const getAdminDashboard = (req, res, next) => {
 	const user = req.user;
@@ -13,12 +14,23 @@ const getAdminDashboard = (req, res, next) => {
 };
 
 const getAllThali = async (req, res, next) => {
-	const thali = await ThaliFeedback.find({});
+	const thali = await Attendence.find({});
+	return res.status(200).json({ thali, nbThali: thali.length });
+};
+
+const getFullThali = async (req, res) => {
+	const thali = await Attendence.find({ thali: "full" });
+	return res.status(200).json({ thali, nbThali: thali.length });
+};
+
+const getHalfThali = async (req, res) => {
+	const thali = await Attendence.find({ thali: "half" });
 	return res.status(200).json({ thali, nbThali: thali.length });
 };
 
 const DateFilter = async (req, res) => {
 	const { date } = req.body;
+	console.log(date);
 	if (!date) {
 		throw new BadRequestError("Please Enter Date");
 	}
@@ -56,4 +68,10 @@ const DateFilter = async (req, res) => {
 	return res.status(StatusCodes.OK).json({ thali: data });
 };
 
-module.exports = { getAllThali, getAdminDashboard, DateFilter };
+module.exports = {
+	getAllThali,
+	getAdminDashboard,
+	DateFilter,
+	getFullThali,
+	getHalfThali,
+};

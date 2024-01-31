@@ -17,7 +17,7 @@ const {
 const auth = require("./router/auth");
 const adminAuth = require("./router/admin");
 const dashboard = require("./router/dashboard");
-const adminDashboard = require("./router/admin-dashboard");
+const adminDashboard = require("./router/admin-dashboard-router");
 const scannerRouter = require("./router/scanner-router");
 
 const notFound = require("./middlewares/not-found");

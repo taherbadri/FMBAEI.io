@@ -9,7 +9,7 @@ const ThaliSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "Thali number not provided"],
 	},
-	qty: {
+	thali: {
 		type: String,
 		enum: ["full", "half", "no-thali"],
 		required: [true, "Specify the quantity Full / Half"],

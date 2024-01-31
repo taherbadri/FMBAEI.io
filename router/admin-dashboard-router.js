@@ -5,8 +5,12 @@ const {
 	getAdminDashboard,
 	getAllThali,
 	DateFilter,
-} = require("../controllers/admin-dashboard");
+	getFullThali,
+	getHalfThali,
+} = require("../controllers/admin-dashboard-controller");
 
 router.route("/dashboard").get(getAdminDashboard);
 router.route("/dashboard/thali").get(getAllThali).post(DateFilter);
+router.route("/dashboard/thali/full").get(getFullThali);
+router.route("/dashboard/thali/half").get(getHalfThali);
 module.exports = router;

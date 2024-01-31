@@ -5,7 +5,9 @@ const { StatusCodes } = require("http-status-codes");
 
 const markAttendence = async (req, res) => {
 	const { id } = req.body;
-	const [{ sabeel, name }] = await User.find({ _id: id });
+	const [{ sabeel, name, its, thali, thaliNumber }] = await User.find({
+		_id: id,
+	});
 	if (!name) {
 		throw new errors.BadRequestError("User does not exist");
 	}
@@ -21,7 +23,14 @@ const markAttendence = async (req, res) => {
 			}
 		});
 	}
-	await Attendence.create({ sabeel, markedAt: date });
+	await Attendence.create({
+		sabeel,
+		name,
+		its,
+		thali,
+		thaliNumber,
+		markedAt: date,
+	});
 
 	res.status(StatusCodes.OK).json({ msg: "Attendence marked successfully" });
 };
