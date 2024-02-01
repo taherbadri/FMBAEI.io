@@ -33,7 +33,7 @@ const login = async (e) => {
 		}),
 	});
 	const data = await res.json();
-	console.log(data);
+	// console.log(data);
 	data.msg === "success"
 		? (window.location.href = "/user/dashboard")
 		: errorFunction(data.msg, loginForm);
@@ -51,7 +51,7 @@ const adminLogin = async (e) => {
 		}),
 	});
 	const data = await res.json();
-	console.log(data);
+	// console.log(data);
 
 	data.msg === "success"
 		? (window.location.href = routes.admin.adminDashboard)
@@ -101,7 +101,7 @@ const feedback = async (e) => {
 };
 
 const createTable = (data) => {
-	if (data.thali.length === 0) {
+	if (data.length === 0) {
 		return (document.querySelector(
 			".thali-data"
 		).innerHTML = `<p class="text-center text-danger my-3">No Data Available</p>`);
@@ -115,7 +115,7 @@ const createTable = (data) => {
 	<th>Comments</th>`;
 
 	// console.log(data);
-	data.thali.forEach((currentItem) => {
+	data.forEach((currentItem) => {
 		const tr = document.createElement("tr");
 		tr.innerHTML = `
 		<td>${new Date(currentItem.markedAt)
@@ -149,23 +149,6 @@ const createTable = (data) => {
 // 	document.querySelector(".half-thali").innerHTML = dataHalf.nbThali;
 // };
 
-const fetchFullThali = async () => {
-	document.querySelector(".thali-data").innerHTML = "";
-	const res = await fetch(`${routes.admin.totalThali}/full`);
-	const data = await res.json();
-	// console.log(data + "full thali");
-	createTable(data);
-	document.querySelector(".full-thali").innerHTML = data.nbThali;
-};
-const fetchHalfThali = async () => {
-	document.querySelector(".thali-data").innerHTML = "";
-	const res = await fetch(`${routes.admin.totalThali}/half`);
-	const data = await res.json();
-	// console.log(data + "half thali");
-	createTable(data);
-	document.querySelector(".half-thali").innerHTML = data.nbThali;
-};
-
 const dateAlterate = () => {
 	const today = new Date();
 	const day = String(today.getDate()).padStart(2, "0");
@@ -181,7 +164,7 @@ const dateFilter = async () => {
 	if (document.querySelector("#date").value) {
 		date = document.querySelector("#date").value;
 	}
-	console.log(date);
+	// console.log(date);
 	const res = await fetch(routes.admin.totalThali, {
 		method: "POST",
 		headers: {
@@ -197,13 +180,75 @@ const dateFilter = async () => {
 			".thali-data"
 		).innerHTML = `<p class="text-center text-danger my-3">${data.msg}</p>`);
 	}
-	console.log(data.thali);
+	// console.log(data.thali);
 	const full = data.thali.filter((user) => user.thali !== "half").length;
 	const half = data.thali.filter((user) => user.thali !== "full").length;
-	createTable(data);
+	createTable(data.thali);
 	document.querySelector(".total-thali").innerHTML = full + half;
 	document.querySelector(".full-thali").innerHTML = full;
 	document.querySelector(".half-thali").innerHTML = half;
+};
+
+const fetchFullThali = async () => {
+	// document.querySelector(".thali-data").innerHTML = "";
+	// const res = await fetch(`${routes.admin.totalThali}/full`);
+	// const data = await res.json();
+	// // console.log(data + "full thali");
+	// createTable(data);
+	// document.querySelector(".full-thali").innerHTML = data.nbThali;
+	document.querySelector(".thali-data").innerHTML = "";
+	let date = dateAlterate();
+	if (document.querySelector("#date").value) {
+		date = document.querySelector("#date").value;
+	}
+	// console.log(date);
+	const res = await fetch(routes.admin.totalThali, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json",
+		},
+		body: JSON.stringify({
+			date,
+		}),
+	});
+	const data = await res.json();
+	if (data.err) {
+		return (document.querySelector(
+			".thali-data"
+		).innerHTML = `<p class="text-center text-danger my-3">${data.msg}</p>`);
+	}
+	createTable(data.thali.filter((user) => user.thali !== "half"));
+};
+
+const fetchHalfThali = async () => {
+	// document.querySelector(".thali-data").innerHTML = "";
+	// const res = await fetch(`${routes.admin.totalThali}/half`);
+	// const data = await res.json();
+	// // console.log(data + "half thali");
+	// createTable(data.thali);
+	// document.querySelector(".half-thali").innerHTML = data.nbThali;
+	document.querySelector(".thali-data").innerHTML = "";
+	let date = dateAlterate();
+	if (document.querySelector("#date").value) {
+		date = document.querySelector("#date").value;
+	}
+	// console.log(date);
+	const res = await fetch(routes.admin.totalThali, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json",
+		},
+		body: JSON.stringify({
+			date,
+		}),
+	});
+	const data = await res.json();
+	if (data.err) {
+		return (document.querySelector(
+			".thali-data"
+		).innerHTML = `<p class="text-center text-danger my-3">${data.msg}</p>`);
+	}
+	createTable(data.thali.filter((user) => user.thali !== "full"));
 };
 
 const page = () => {
@@ -263,7 +308,7 @@ const page = () => {
 						}),
 					});
 					const data = await res.json();
-					console.log(data.msg + " : this is data");
+					// console.log(data.msg + " : this is data");
 					const div = document.createElement("div");
 					const text = document.createTextNode(data.msg);
 					div.className = data.err
@@ -282,7 +327,7 @@ const page = () => {
 			};
 
 			const error = (err) => {
-				console.log(err);
+				// console.log(err);
 			};
 
 			scanner.render(success, error);
