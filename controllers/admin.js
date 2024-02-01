@@ -33,8 +33,8 @@ const adminLogin = async (req, res, next) => {
 	const token = admin.createJWT();
 
 	res.cookie("adminJWT", token, { httpOnly: true, maxAge: 3600000 });
-	res.redirect("/admin/access/dashboard");
-	// return res.status(StatusCodes.OK).json({ token });
+	// res.redirect("/admin/access/dashboard");
+	return res.status(StatusCodes.OK).json({ msg: "success" });
 };
 
 const adminLogout = (req, res, next) => {

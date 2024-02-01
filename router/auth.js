@@ -8,6 +8,7 @@ const {
 	loginPage,
 	registerPage,
 } = require("../controllers/auth");
+const { authenticateuser } = require("../middlewares/auth-middleware");
 
 router.route("/").get(loginPage);
 router.route("/register").get(registerPage);

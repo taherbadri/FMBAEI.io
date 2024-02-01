@@ -9,7 +9,7 @@ const User = require("../models/user");
 // const bcrypt = require("bcryptjs");
 
 const register = async (req, res, next) => {
-	console.log(req.body);
+	// console.log(req.body);
 	const user = await User.create({ ...req.body });
 	// return res.status(StatusCodes.CREATED).json({ user });
 	return res.redirect("/");
@@ -30,8 +30,8 @@ const login = async (req, res, next) => {
 	}
 	const token = user.createJWT();
 	res.cookie("jwt", token, { httpOnly: true, maxAge: 1200000 });
-	res.redirect("/user/dashboard");
-	// return res.status(StatusCodes.OK).json({ msg: "success", token });
+	// return res.redirect("/user/dashboard");
+	return res.status(StatusCodes.OK).json({ msg: "success" });
 };
 
 const loginPage = (req, res, next) => {
@@ -43,7 +43,9 @@ const registerPage = (req, res, next) => {
 
 const logout = (req, res, next) => {
 	res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });
-	res.status(StatusCodes.OK).json({ msg: "logged out successfully" });
+	return res.redirect("/");
+	// res.status(StatusCodes.OK).json({ msg: "logged out successfully" });
+	// next();
 };
 
 module.exports = {

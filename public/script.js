@@ -1,28 +1,61 @@
-// const loginForm = document.querySelector(".login-form");
-
-// const login = async (e) => {
-// 	const res = await fetch("/user/login", {
-// 		method: "POST",
-// 		headers: {
-// 			"content-type": "application/json",
-// 		},
-// 		body: JSON.stringify({
-// 			its: document.querySelector("#its").value,
-// 			password: document.querySelector("#password").value,
-// 		}),
-// 	});
-// 	const data = await res.text();
-// 	console.log(data);
-// };
-
-// loginForm.addEventListener("submit", login);
-
 const routes = {
 	userDashboard: "/user/dashboard",
 	admin: {
 		adminDashboard: "/admin/access/dashboard",
 		totalThali: "/admin/access/dashboard/thali",
 	},
+};
+
+const errorFunction = (msg, parentElem) => {
+	const div = document.createElement("div");
+	const text = document.createTextNode(msg);
+	div.className = "text-danger text-center";
+	div.appendChild(text);
+	parentElem.insertBefore(div, parentElem.firstElementChild);
+	setTimeout(() => {
+		div.remove();
+	}, 3000);
+};
+
+const loginForm = document.querySelector(".login-form");
+const adminLoginForm = document.querySelector(".admin-login-form");
+
+const login = async (e) => {
+	e.preventDefault();
+	const res = await fetch("/user/login", {
+		method: "POST",
+		headers: {
+			"content-type": "application/json",
+		},
+		body: JSON.stringify({
+			its: document.querySelector("#its").value,
+			password: document.querySelector("#password").value,
+		}),
+	});
+	const data = await res.json();
+	console.log(data);
+	data.msg === "success"
+		? (window.location.href = "/user/dashboard")
+		: errorFunction(data.msg, loginForm);
+};
+const adminLogin = async (e) => {
+	e.preventDefault();
+	const res = await fetch("/admin/login", {
+		method: "POST",
+		headers: {
+			"content-type": "application/json",
+		},
+		body: JSON.stringify({
+			name: document.querySelector("#name").value,
+			password: document.querySelector("#password").value,
+		}),
+	});
+	const data = await res.json();
+	console.log(data);
+
+	data.msg === "success"
+		? (window.location.href = routes.admin.adminDashboard)
+		: errorFunction(data.msg, adminLoginForm);
 };
 
 const feedbackForm = document.querySelector(".feedback");
@@ -177,6 +210,14 @@ const dateFilter = async () => {
 
 const page = () => {
 	switch (window.location.pathname) {
+		case "/":
+			loginForm.addEventListener("submit", login);
+			break;
+
+		case "/admin/login":
+			adminLoginForm.addEventListener("submit", adminLogin);
+			break;
+
 		case routes.userDashboard:
 			document.querySelector(".logout").addEventListener("click", async (e) => {
 				const res = await fetch("/user/logout", {
