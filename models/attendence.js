@@ -32,6 +32,10 @@ const AttendenceSchema = new mongoose.Schema({
 	markedAt: {
 		type: Date,
 	},
+	comment: {
+		type: String,
+		maxLength: [500, "Maximum limit is 500 characters"],
+	},
 });
 
 module.exports = mongoose.model("Attendence", AttendenceSchema);

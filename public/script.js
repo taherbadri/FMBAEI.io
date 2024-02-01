@@ -74,7 +74,7 @@ const feedback = async (e) => {
 		body: JSON.stringify({
 			thaliNumber: document.querySelector("#thaliNumber").value,
 			sabeel: document.querySelector("#sabeel").value,
-			qty: document.querySelector(`input[name="qty"]:checked`).value,
+			// qty: document.querySelector(`input[name="qty"]:checked`).value,
 			comment: document.querySelector("#comment").value,
 		}),
 	});
@@ -111,8 +111,8 @@ const createTable = (data) => {
 	<th>Sabeel</th>
 	<th>Name</th>
 	<th>Thali Number</th>
-	<th>Thali Quantity</th>`;
-	// <th>Comments</th>`;
+	<th>Thali Quantity</th>
+	<th>Comments</th>`;
 
 	// console.log(data);
 	data.thali.forEach((currentItem) => {
@@ -126,48 +126,62 @@ const createTable = (data) => {
 		<td>${currentItem.sabeel}</td>
 		<td>${currentItem.name}</td>
 		<td>${currentItem.thaliNumber}</td>
-		<td>${currentItem.thali}</td>`;
-		// <td>${currentItem.comment}</td>`;
+		<td>${currentItem.thali}</td>
+		<td>${currentItem.comment}</td>`;
 		document.querySelector(".thali-data").firstElementChild.appendChild(tr);
 	});
 };
 
-const fetchThali = async () => {
-	document.querySelector(".thali-data").innerHTML = "";
-	const res = await fetch(routes.admin.totalThali);
-	const data = await res.json();
-	document.querySelector(".thali-data").innerHTML = "";
-	const resFull = await fetch(`${routes.admin.totalThali}/full`);
-	const dataFull = await resFull.json();
-	document.querySelector(".thali-data").innerHTML = "";
-	const resHalf = await fetch(`${routes.admin.totalThali}/half`);
-	const dataHalf = await resHalf.json();
-	// console.log(data);
-	createTable(data);
-	document.querySelector(".total-thali").innerHTML = data.nbThali;
-	document.querySelector(".full-thali").innerHTML = dataFull.nbThali;
-	document.querySelector(".half-thali").innerHTML = dataHalf.nbThali;
-};
-const fetchFullThali = async () => {
-	document.querySelector(".thali-data").innerHTML = "";
-	const res = await fetch(`${routes.admin.totalThali}/full`);
-	const data = await res.json();
-	// console.log(data + "full thali");
-	createTable(data);
-	document.querySelector(".full-thali").innerHTML = data.nbThali;
-};
-const fetchHalfThali = async () => {
-	document.querySelector(".thali-data").innerHTML = "";
-	const res = await fetch(`${routes.admin.totalThali}/half`);
-	const data = await res.json();
-	// console.log(data + "half thali");
-	createTable(data);
-	document.querySelector(".half-thali").innerHTML = data.nbThali;
+// const fetchThali = async () => {
+// 	document.querySelector(".thali-data").innerHTML = "";
+// 	const res = await fetch(routes.admin.totalThali);
+// 	const data = await res.json();
+// 	document.querySelector(".thali-data").innerHTML = "";
+// 	const resFull = await fetch(`${routes.admin.totalThali}/full`);
+// 	const dataFull = await resFull.json();
+// 	document.querySelector(".thali-data").innerHTML = "";
+// 	const resHalf = await fetch(`${routes.admin.totalThali}/half`);
+// 	const dataHalf = await resHalf.json();
+// 	// console.log(data);
+// 	createTable(data);
+// 	document.querySelector(".total-thali").innerHTML = data.nbThali;
+// 	document.querySelector(".full-thali").innerHTML = dataFull.nbThali;
+// 	document.querySelector(".half-thali").innerHTML = dataHalf.nbThali;
+// };
+
+// const fetchFullThali = async () => {
+// 	document.querySelector(".thali-data").innerHTML = "";
+// 	const res = await fetch(`${routes.admin.totalThali}/full`);
+// 	const data = await res.json();
+// 	// console.log(data + "full thali");
+// 	createTable(data);
+// 	document.querySelector(".full-thali").innerHTML = data.nbThali;
+// };
+// const fetchHalfThali = async () => {
+// 	document.querySelector(".thali-data").innerHTML = "";
+// 	const res = await fetch(`${routes.admin.totalThali}/half`);
+// 	const data = await res.json();
+// 	// console.log(data + "half thali");
+// 	createTable(data);
+// 	document.querySelector(".half-thali").innerHTML = data.nbThali;
+// };
+
+const dateAlterate = () => {
+	const today = new Date();
+	const day = String(today.getDate()).padStart(2, "0");
+	const month = String(today.getMonth() + 1).padStart(2, "0");
+	const year = today.getFullYear();
+	const formattedDate = year + "-" + month + "-" + day;
+	return formattedDate;
 };
 
 const dateFilter = async () => {
 	document.querySelector(".thali-data").innerHTML = "";
-	const date = document.querySelector("#date").value;
+	let date = dateAlterate();
+	if (document.querySelector("#date").value) {
+		date = document.querySelector("#date").value;
+	}
+	console.log(date);
 	const res = await fetch(routes.admin.totalThali, {
 		method: "POST",
 		headers: {
@@ -183,29 +197,13 @@ const dateFilter = async () => {
 			".thali-data"
 		).innerHTML = `<p class="text-center text-danger my-3">${data.msg}</p>`);
 	}
-	document.querySelector(".thali-data").innerHTML = `
-	<th>Date</th>
-	<th>Sabeel</th>
-	<th>Name</th>
-	<th>Thali Number</th>
-	<th>Thali Quantity</th>`;
-	// <th>Comments</th>`;
-	// console.log(data);
-	data.thali.forEach((currentItem) => {
-		const tr = document.createElement("tr");
-		tr.innerHTML = `
-		<td>${new Date(currentItem.markedAt)
-			.toString()
-			.split(" ")
-			.splice(0, 4)
-			.join(" ")}</td>
-		<td>${currentItem.sabeel}</td>
-		<td>${currentItem.name}</td>
-		<td>${currentItem.thaliNumber}</td>
-		<td>${currentItem.thali}</td>`;
-		// <td>${currentItem.comment}</td>`;
-		document.querySelector(".thali-data").firstElementChild.appendChild(tr);
-	});
+	console.log(data.thali);
+	const full = data.thali.filter((user) => user.thali !== "half").length;
+	const half = data.thali.filter((user) => user.thali !== "full").length;
+	createTable(data);
+	document.querySelector(".total-thali").innerHTML = full + half;
+	document.querySelector(".full-thali").innerHTML = full;
+	document.querySelector(".half-thali").innerHTML = half;
 };
 
 const page = () => {
@@ -228,10 +226,11 @@ const page = () => {
 			feedbackForm.addEventListener("submit", feedback);
 			break;
 		case routes.admin.adminDashboard:
-			fetchThali();
-			totalThali.addEventListener("click", fetchThali);
-			fullThali.addEventListener("click", fetchFullThali);
-			halfThali.addEventListener("click", fetchHalfThali);
+			// fetchThali();
+			dateFilter();
+			totalThali.addEventListener("click", dateFilter);
+			fullThali.addEventListener("click", dateFilter);
+			halfThali.addEventListener("click", dateFilter);
 			document
 				.querySelector(".submit-date")
 				.addEventListener("click", dateFilter);

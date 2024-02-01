@@ -19,7 +19,9 @@ const authenticateuser = async (req, res, next) => {
 		const payload = jwt.verify(token, process.env.JWT_SECRET);
 		req.user = { ...payload };
 	} catch (error) {
-		throw new UnauthenticatedError("Authentication Invalid");
+		throw new UnauthenticatedError(
+			"Authentication Invalid / Session timed out"
+		);
 	}
 	next();
 };
@@ -41,7 +43,9 @@ const authenticateAdmin = async (req, res, next) => {
 		const payload = jwt.verify(token, process.env.JWT_SECRET);
 		req.user = { ...payload };
 	} catch (error) {
-		throw new UnauthenticatedError("Authentication Invalid");
+		throw new UnauthenticatedError(
+			"Authentication Invalid / Session timed out"
+		);
 	}
 	next();
 };

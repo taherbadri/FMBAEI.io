@@ -45,7 +45,6 @@ const logout = (req, res, next) => {
 	res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });
 	return res.redirect("/");
 	// res.status(StatusCodes.OK).json({ msg: "logged out successfully" });
-	// next();
 };
 
 module.exports = {
