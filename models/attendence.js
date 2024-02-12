@@ -27,7 +27,6 @@ const AttendenceSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "Please Enter you full name"],
 		minLength: 5,
-		maxLength: 30,
 	},
 	markedAt: {
 		type: Date,
