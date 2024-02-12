@@ -1,2 +1,4 @@
 node-modules
 .env
+upload.js
+fmb-data.json

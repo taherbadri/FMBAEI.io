@@ -3,41 +3,69 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
+	name: {
+		type: String,
+		required: [true, "Please Enter you full name"],
+		minLength: 5,
+	},
+	sabeel: {
+		type: String,
+		required: [true, "Please provide your Sabeel Number"],
+		unique: true,
+	},
+	thaliNumber: {
+		type: String,
+		required: [true, "Enter Thali number"],
+		unique: true,
+		default: "NA",
+	},
 	its: {
 		type: String,
 		required: [true, "Please provide ITS ID"],
 		maxLength: 8,
 		unique: true,
 	},
+	members: {
+		type: String,
+		default: "0",
+	},
 	password: {
 		type: String,
 		required: [true, "Please Enter Password"],
 		minLength: [5, "Password should be atleast 5 characters long"],
 	},
+	mobile: {
+		type: String,
+	},
 	thali: {
 		type: String,
 		default: "full",
 	},
-	thaliNumber: {
-		type: String,
-		required: [true, "Enter Thali number"],
-		unique: true,
-	},
-	sabeel: {
-		type: String,
-		minLength: 4,
-		required: [true, "Please provide your Sabeel Number"],
-		unique: true,
-	},
-	name: {
-		type: String,
-		required: [true, "Please Enter you full name"],
-		minLength: 5,
-		maxLength: 30,
-	},
-	comment: {
+
+	address: {
 		type: String,
 		maxLength: [500, "Maximum 500 characters allowed"],
+	},
+	type: {
+		type: String,
+	},
+	sector: {
+		type: String,
+	},
+	jamaat: {
+		type: String,
+	},
+	jamiat: {
+		type: String,
+	},
+	city: {
+		type: String,
+	},
+	state: {
+		type: String,
+	},
+	country: {
+		type: String,
 	},
 });
 
