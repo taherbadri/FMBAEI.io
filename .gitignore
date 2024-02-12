@@ -1,4 +1,7 @@
-node-modules
+node_modules
 .env
 upload.js
 fmb-data.json
+FMB_User_Data.xlsx
+databasetojson.js
+data.json

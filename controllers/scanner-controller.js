@@ -6,7 +6,9 @@ const { StatusCodes } = require("http-status-codes");
 
 const markAttendence = async (req, res) => {
 	const { id } = req.body;
-	const [{ sabeel, name, its, thali, thaliNumber }] = await User.find({
+	const [
+		{ sabeel, name, its, thali, thaliNumber, sector, type, address, mobile },
+	] = await User.find({
 		_id: id,
 	});
 	if (!name) {
@@ -40,6 +42,10 @@ const markAttendence = async (req, res) => {
 		thaliNumber,
 		markedAt: date,
 		comment,
+		sector,
+		address,
+		mobile,
+		type,
 	});
 
 	res

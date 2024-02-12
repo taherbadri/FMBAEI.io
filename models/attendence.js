@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const AttendenceSchema = new mongoose.Schema({
-	sabeel: {
-		type: String,
-		required: [true, "Please provide Sabeel number"],
-	},
 	its: {
 		type: String,
 		required: [true, "Please provide ITS ID"],
@@ -34,6 +30,19 @@ const AttendenceSchema = new mongoose.Schema({
 	comment: {
 		type: String,
 		maxLength: [500, "Maximum limit is 500 characters"],
+	},
+	mobile: {
+		type: String,
+	},
+	address: {
+		type: String,
+		maxLength: [500, "Maximum 500 characters allowed"],
+	},
+	type: {
+		type: String,
+	},
+	sector: {
+		type: String,
 	},
 });
 

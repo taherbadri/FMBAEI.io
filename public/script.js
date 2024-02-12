@@ -99,7 +99,7 @@ const feedback = async (e) => {
 		div.remove();
 	}, 3000);
 };
-
+/*
 const createTable = (data) => {
 	if (data.length === 0) {
 		return (document.querySelector(
@@ -130,7 +130,85 @@ const createTable = (data) => {
 		<td>${currentItem.comment}</td>`;
 		document.querySelector(".thali-data").firstElementChild.appendChild(tr);
 	});
+};*/
+
+let dataTable; // Define a variable to hold the DataTable instance
+
+const createTable = (data) => {
+	console.log(data);
+	// Check if DataTable instance exists
+	if (dataTable) {
+		dataTable.destroy(); // Destroy the existing DataTable instance
+	}
+
+	if (data.length === 0) {
+		document.querySelector(
+			".thali-data"
+		).innerHTML = `<p class="text-center text-danger my-3">No Data Available</p>`;
+		setTimeout(() => {
+			window.location.reload();
+		}, 3000);
+	} else {
+		dataTable = $(".thali-data").DataTable({
+			// Define column headers
+			columns: [
+				{ title: "Date" },
+				{ title: "Thali Type" },
+				{ title: "Name" },
+				{ title: "Thali Number" },
+				{ title: "Thali Quantity" },
+				{ title: "Comments" },
+			],
+		});
+
+		// Populate the DataTable with data
+		data.forEach((currentItem) => {
+			const row = dataTable.row
+				.add([
+					new Date(currentItem.markedAt)
+						.toString()
+						.split(" ")
+						.splice(0, 4)
+						.join(" "),
+					currentItem.type,
+					currentItem.name,
+					currentItem.thaliNumber,
+					currentItem.thali,
+					currentItem.comment,
+				])
+				.draw(false)
+				.node();
+
+			// Add a click event listener to toggle expand/collapse on name click
+			$(row)
+				.find("td:nth-child(3)")
+				.on("click", function () {
+					const tr = $(this).closest("tr");
+					const row = dataTable.row(tr);
+
+					if (row.child.isShown()) {
+						// This row is already open - close it
+						row.child.hide();
+						tr.removeClass("shown");
+					} else {
+						// Open this row
+						row.child(formatRowDetails(currentItem)).show();
+						tr.addClass("shown");
+					}
+				});
+		});
+	}
 };
+
+// Function to format the details shown in the child row
+function formatRowDetails(data) {
+	return `<table class="table table-bordered">
+	<tr><td><strong>Sabeel:</strong></td><td>${data.sabeel}</td></tr>
+                <tr><td><strong>Sector:</strong></td><td>${data.sector}</td></tr>
+                <tr><td><strong>Address:</strong></td><td>${data.address}</td></tr>
+                <tr><td><strong>Mobile:</strong></td><td>+91-${data.mobile}</td></tr>
+            </table>`;
+}
 
 // const fetchThali = async () => {
 // 	document.querySelector(".thali-data").innerHTML = "";

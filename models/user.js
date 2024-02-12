@@ -34,14 +34,13 @@ const UserSchema = new mongoose.Schema({
 		required: [true, "Please Enter Password"],
 		minLength: [5, "Password should be atleast 5 characters long"],
 	},
-	mobile: {
-		type: String,
-	},
 	thali: {
 		type: String,
 		default: "full",
 	},
-
+	mobile: {
+		type: String,
+	},
 	address: {
 		type: String,
 		maxLength: [500, "Maximum 500 characters allowed"],
@@ -83,6 +82,8 @@ UserSchema.methods.createJWT = function () {
 			thaliNumber: this.thaliNumber,
 			sabeel: this.sabeel,
 			thaliType: this.thali,
+			address: this.address,
+			sector: this.sector,
 		},
 		process.env.JWT_SECRET,
 		{
