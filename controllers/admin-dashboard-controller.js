@@ -14,10 +14,11 @@ const getAdminDashboard = (req, res, next) => {
 };
 
 const getAllThali = async (req, res, next) => {
-	const date = new Date().toString().split(" ").splice(0, 4).join(" ");
-	const thali = await Attendence.find({ markedAt: date });
+	// const date = new Date().toString().split(" ").splice(0, 4).join(" ");
+	// const thali = await Attendence.find({ markedAt: date });
 	// console.log(thali[0].markedAt === date);
 	// console.log(thali);
+	const thali = await User.find({});
 	return res.status(200).json({ thali, nbThali: thali.length });
 };
 

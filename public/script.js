@@ -62,6 +62,7 @@ const feedbackForm = document.querySelector(".feedback");
 const totalThali = document.querySelector(".total");
 const fullThali = document.querySelector(".full");
 const halfThali = document.querySelector(".half");
+const notScanned = document.querySelector(".not-scanned");
 
 const feedback = async (e) => {
 	e.preventDefault();
@@ -99,43 +100,10 @@ const feedback = async (e) => {
 		div.remove();
 	}, 3000);
 };
-/*
-const createTable = (data) => {
-	if (data.length === 0) {
-		return (document.querySelector(
-			".thali-data"
-		).innerHTML = `<p class="text-center text-danger my-3">No Data Available</p>`);
-	}
-	document.querySelector(".thali-data").innerHTML = `
-	<th>Date</th>
-	<th>Sabeel</th>
-	<th>Name</th>
-	<th>Thali Number</th>
-	<th>Thali Quantity</th>
-	<th>Comments</th>`;
-
-	// console.log(data);
-	data.forEach((currentItem) => {
-		const tr = document.createElement("tr");
-		tr.innerHTML = `
-		<td>${new Date(currentItem.markedAt)
-			.toString()
-			.split(" ")
-			.splice(0, 4)
-			.join(" ")}</td>
-		<td>${currentItem.sabeel}</td>
-		<td>${currentItem.name}</td>
-		<td>${currentItem.thaliNumber}</td>
-		<td>${currentItem.thali}</td>
-		<td>${currentItem.comment}</td>`;
-		document.querySelector(".thali-data").firstElementChild.appendChild(tr);
-	});
-};*/
 
 let dataTable; // Define a variable to hold the DataTable instance
-
 const createTable = (data) => {
-	console.log(data);
+	document.querySelector(".thali-data").innerHTML = "";
 	// Check if DataTable instance exists
 	if (dataTable) {
 		dataTable.destroy(); // Destroy the existing DataTable instance
@@ -145,9 +113,6 @@ const createTable = (data) => {
 		document.querySelector(
 			".thali-data"
 		).innerHTML = `<p class="text-center text-danger my-3">No Data Available</p>`;
-		setTimeout(() => {
-			window.location.reload();
-		}, 3000);
 	} else {
 		dataTable = $(".thali-data").DataTable({
 			// Define column headers
@@ -155,10 +120,12 @@ const createTable = (data) => {
 				{ title: "Date" },
 				{ title: "Thali Type" },
 				{ title: "Name" },
-				{ title: "Thali Number" },
-				{ title: "Thali Quantity" },
+				{ title: "Sabeel" },
+				{ title: "Sector" },
 				{ title: "Comments" },
 			],
+			// Add Buttons extension
+			buttons: ["pdfHtml5"],
 		});
 
 		// Populate the DataTable with data
@@ -172,12 +139,21 @@ const createTable = (data) => {
 						.join(" "),
 					currentItem.type,
 					currentItem.name,
-					currentItem.thaliNumber,
-					currentItem.thali,
+					currentItem.sabeel,
+					currentItem.sector,
 					currentItem.comment,
 				])
 				.draw(false)
 				.node();
+
+			$(document).on("change", "#thaliTypeFilter", function () {
+				const selectedValue = $(this).val();
+				if (selectedValue === "") {
+					dataTable.columns(1).search("").draw(); // Clear filter and redraw the table
+				} else {
+					dataTable.columns(1).search(selectedValue).draw(); // Filter table based on selected value
+				}
+			});
 
 			// Add a click event listener to toggle expand/collapse on name click
 			$(row)
@@ -196,6 +172,33 @@ const createTable = (data) => {
 						tr.addClass("shown");
 					}
 				});
+
+			$(document).on("click", "#printData", function () {
+				const filteredData = dataTable.rows().data().toArray(); // Get all data from the DataTable
+				const selectedValue = $("#thaliTypeFilter").val(); // Get the selected value from the dropdown
+
+				// Filter data based on the selected value
+				const printableData =
+					selectedValue === ""
+						? filteredData
+						: filteredData.filter((row) => row[1] === selectedValue);
+
+				// Format the filtered data for printing (e.g., create a printable HTML string)
+				let printableHtml = "";
+				printableHtml += `<table class="table table-striped" border='1'><tr><th>Serial Number</th><th>Name</th><th>Sector</th></tr>`;
+				printableData.forEach((row, index) => {
+					printableHtml += `<tr><td>${index + 1}</td><td>${row[2]}</td><td>${
+						row[4]
+					}</td></tr>`;
+				});
+				printableHtml += "</table>";
+
+				// Open a new window and print
+				const printWindow = window.open("", "_blank");
+				printWindow.document.write(printableHtml);
+				printWindow.document.close();
+				printWindow.print();
+			});
 		});
 	}
 };
@@ -203,8 +206,8 @@ const createTable = (data) => {
 // Function to format the details shown in the child row
 function formatRowDetails(data) {
 	return `<table class="table table-bordered">
-	<tr><td><strong>Sabeel:</strong></td><td>${data.sabeel}</td></tr>
-                <tr><td><strong>Sector:</strong></td><td>${data.sector}</td></tr>
+                <tr><td><strong>Thali Number:</strong></td><td>${data.thaliNumber}</td></tr>
+                <tr><td><strong>Thali Quantity:</strong></td><td>${data.thali}</td></tr>
                 <tr><td><strong>Address:</strong></td><td>${data.address}</td></tr>
                 <tr><td><strong>Mobile:</strong></td><td>+91-${data.mobile}</td></tr>
             </table>`;
@@ -236,6 +239,11 @@ const dateAlterate = () => {
 	return formattedDate;
 };
 
+const thaliUsers = {
+	presentees: [],
+	all: 0,
+};
+
 const dateFilter = async () => {
 	document.querySelector(".thali-data").innerHTML = "";
 	let date = dateAlterate();
@@ -253,6 +261,10 @@ const dateFilter = async () => {
 		}),
 	});
 	const data = await res.json();
+	const allUsers = await fetch(routes.admin.totalThali);
+	const allUsersData = await allUsers.json();
+	thaliUsers.presentees = data.thali;
+	thaliUsers.all = allUsersData.nbThali;
 	if (data.err) {
 		return (document.querySelector(
 			".thali-data"
@@ -265,6 +277,8 @@ const dateFilter = async () => {
 	document.querySelector(".total-thali").innerHTML = full + half;
 	document.querySelector(".full-thali").innerHTML = full;
 	document.querySelector(".half-thali").innerHTML = half;
+	document.querySelector(".not-scanned-count").innerHTML =
+		thaliUsers.all - thaliUsers.presentees.length;
 };
 
 const fetchFullThali = async () => {
@@ -329,6 +343,29 @@ const fetchHalfThali = async () => {
 	createTable(data.thali.filter((user) => user.thali !== "full"));
 };
 
+const notScannedUsers = async () => {
+	const res = await fetch(routes.admin.totalThali);
+	const users = await res.json();
+	thaliUsers.all = users.length;
+	const absentees = [];
+	// users.thali.forEach((user) => {
+	// 	return !data.includes() && absentees.push(user);
+	// });
+	for (const user of users.thali) {
+		let present = false;
+		for (const presentUser of thaliUsers.presentees) {
+			if (user.sabeel === presentUser.sabeel) {
+				present = true;
+				break;
+			}
+		}
+		if (!present) {
+			absentees.push({ ...user, markedAt: "Absent", comment: "Not Scanned" });
+		}
+	}
+	createTable(absentees);
+};
+
 const page = () => {
 	switch (window.location.pathname) {
 		case "/":
@@ -354,6 +391,7 @@ const page = () => {
 			totalThali.addEventListener("click", dateFilter);
 			fullThali.addEventListener("click", fetchFullThali);
 			halfThali.addEventListener("click", fetchHalfThali);
+			notScanned.addEventListener("click", notScannedUsers);
 			document
 				.querySelector(".submit-date")
 				.addEventListener("click", dateFilter);
